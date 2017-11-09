@@ -40,13 +40,17 @@ void Add_room(ROOM *room)
 {
 	ROOM *newroom = (ROOM *)malloc(sizeof(ROOM)) ;
 
-		printf("Enter the room number : ") ; 
-		scanf("%d" , newroom->room_no) ;
-		printf("Enter the floor in which the room exists : ") ; 
-		scanf("%d" , newroom->room_floor) ;
+	printf("Enter the room number : ") ; 
+	scanf("%d" , newroom->room_no) ;
+	printf("Enter the floor in which the room exists : ") ; 
+	scanf("%d" , newroom->room_floor) ;
+	
 	if(room==NULL)
 	{
-		}
+
+		
+
+	}
 
 	else
 	{
