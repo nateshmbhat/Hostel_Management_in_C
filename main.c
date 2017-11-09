@@ -30,6 +30,7 @@ typedef struct rooms
 	int room_no ;
 	int room_floor;
 	bool flag_taken  ;
+	struct rooms *next ;
 }ROOM ;
 
 
@@ -79,6 +80,37 @@ void Add_room(ROOM *room)
 
 
 
+///Reads the rooms details from the file and inserts the rooms into a linked list .
+ROOM * read_all_rooms_from_file() ///or insert rooms at the end of list
+{
+
+
+	FILE *fp_room = fopen("rooms_initial.txt" , "r+") ;
+	if(!fp_room)
+	{
+		printf("\nError opening the file rooms_initial.txt !!!\n") ;
+		return 0 ;
+	}
+
+int ref_flag = 1 ;
+
+while(!feof(fp_room))
+	{
+		ROOM *new_room = (ROOM *)malloc(sizeof(ROOM)) ;
+
+		newroom->flag_taken = false ;
+
+		fscanf(fp_room , "%d %d\n" , newroom->room_no , newroom->room_floor) ;	
+		
+		if(ref_flag){ROOM *first_room = new_room ; ref_flag = 0 ; }
+
+	}
+
+fclose(fp_room) ;
+
+return first_room ;
+	
+}
 
 
 
