@@ -19,9 +19,11 @@ typedef struct student
 	int hostel_id ; 
 	char usn[100] ;
 	struct address addr  ;
-	int prefered_room ;
-	int prefered_floor ;
+	int prefered_room ;  //THIS TAKES THE FIRST PREFERENCE IN ALLOTING ROOMS
+	int prefered_floor ; // THIS TAKES THE SECOND PREFERENCE IN ALLOTING ROOMS
+	struct student *next ;
 }student ;
+
 
 
 typedef struct rooms
@@ -32,6 +34,14 @@ typedef struct rooms
 	bool flag_taken  ;
 	struct rooms *next ;
 }ROOM ;
+
+
+
+typedef struct student_queue
+{
+	student stu ;
+	struct student_queue *next ;
+}STUDENT_QUEUE ;
 
 
 
@@ -115,15 +125,72 @@ return first_room ;
 
 
 
-node * add_student_to_queue(node * first )
+
+
+STUDENT_QUEUE * add_student_to_queue(STUDENT_QUEUE *first , student s)
 {
 
+	node *newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE)) ;
+	if(!newnode)
+	{
+		printf("\nMaximum memory reached . Malloc failed to allocate for a new queue node ! \n") ; 
+	}
+	newnode->next = NULL ;
+	newnode->stu = s ;
 
+	node *temp = first ;
+	if(first == NULL)
+	{
+		first = newnode ;
+		return newnode ;
+	}
+
+	while(temp->next)
+		temp = temp->next ;
+
+	temp->next = newnode ;
+	return first ; 
 }
+
+
+
+
+STUDENT_QUEUE * remove_student_from_queue(STUDENT_QUEUE *first) ///DELETE FIRST STUDENT from queue
+{
+	
+	if(!first)
+	{
+		printf("\nThe queue is Empty !\n") ;
+		return NULL ;
+	}
+
+	STUDENT_QUEUE * temp = first ; 
+	first = first->next ;
+
+	free(temp) ;
+	return first ;
+}
+
+
+
+
+bool check_if_room_exists(ROOM *first_room , int room_no)
+{
+	while(first_room->next)
+	{
+		if(first_room->room_no ==room_no)
+			return 1 ;
+	}
+}
+
+
 
 
 
 int main()
 {
+
+	ROOM *first_room = 0 ;
+	STUDENT_QUEUE *first_student_queue = 0  ; 
 
 }
