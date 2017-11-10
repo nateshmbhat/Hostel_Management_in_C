@@ -4,7 +4,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<stdbool.h>
-
+#include<unistd.h>
 
 struct address
 {
@@ -13,15 +13,15 @@ struct address
 	char street[100] ;
 } ;
 
-typedef struct student
+typedef struct student_structure
 {
-	char name[100]  ; 
-	int hostel_id ; 
+	char name[100]  ;
+	int hostel_id ;
 	char usn[100] ;
 	struct address addr  ;
 	int prefered_room ;  //THIS TAKES THE FIRST PREFERENCE IN ALLOTING ROOMS
 	int prefered_floor ; // THIS TAKES THE SECOND PREFERENCE IN ALLOTING ROOMS
-	struct student *next ;
+	struct student_structure *next ;
 }student ;
 
 
@@ -45,9 +45,24 @@ typedef struct student_queue
 
 
 
-///This function is used to add or insert rooms into the pool of rooms and takes the room_no and its floor as input 
+///Prints the string given with a smooth transition
+void print_animated(char * str)
+{
+	printf("\n") ;
+	int i =0 ;
+	for(i=0 ; str[i] ; i++)
+	{
+		printf("%c" , str[i]) ;
+		usleep(70000)  ;
+		fflush(stdout) ;
+	}
+}
+
+
+
+///This function is used to add or insert rooms into the pool of rooms and takes the room_no and its floor as input
 ///Takes any room node as the input and within the function initialises the room_no and floor and flag para
-///This is used whenever newrooms are built and have to be added to the list of rooms 
+///This is used whenever newrooms are built and have to be added to the list of rooms
 
 ///If the room parameter is null then the details of the room are read the file and then the added details are appended to the file .
 
@@ -55,16 +70,16 @@ void Add_room(ROOM *room)
 {
 	ROOM *newroom = (ROOM *)malloc(sizeof(ROOM)) ;
 
-	printf("Enter the room number : ") ; 
+	printf("Enter the room number : ") ;
 	scanf("%d" , newroom->room_no) ;
-	printf("Enter the floor in which the room exists : ") ; 
+	printf("Enter the floor in which the room exists : ") ;
 	scanf("%d" , newroom->room_floor) ;
-	newroom->flag_taken = false ;	
+	newroom->flag_taken = false ;
 
 
 	if(room==NULL)
 	{
-		///Write the new added room to the room_details . THis file contains each room number and its corresponding floor 
+		///Write the new added room to the room_details . THis file contains each room number and its corresponding floor
 
 		FILE *fp_room = fopen("rooms_initial.txt" , "a+");
 		if(!fp_room)
@@ -73,8 +88,10 @@ void Add_room(ROOM *room)
 			return  ;
 		}
 
-		fprintf(fp_room , "%d %d\n" , newroom->room_no , newroom->room_floor); 
+		fprintf(fp_room , "%d %d\n" , newroom->room_no , newroom->room_floor);
 		fclose(fp_room) ;
+
+		print_animated("\nRoom details written successfully to the file ! \n") ;
 
 	}
 
@@ -83,7 +100,7 @@ void Add_room(ROOM *room)
 
 		while(room->next)
 			room = room->next ;
-		room->next = newnode ;
+		room->next = newroom ;
 
 	}
 }
@@ -103,23 +120,24 @@ ROOM * read_all_rooms_from_file() ///or insert rooms at the end of list
 	}
 
 int ref_flag = 1 ;
-
+ROOM *first_room ;
 while(!feof(fp_room))
 	{
-		ROOM *new_room = (ROOM *)malloc(sizeof(ROOM)) ;
+		ROOM *newroom = (ROOM *)malloc(sizeof(ROOM)) ;
 
 		newroom->flag_taken = false ;
 
-		fscanf(fp_room , "%d %d\n" , newroom->room_no , newroom->room_floor) ;	
-		
-		if(ref_flag){ROOM *first_room = new_room ; ref_flag = 0 ; }
+		fscanf(fp_room , "%d %d\n" , newroom->room_no , newroom->room_floor) ;
+
+		if(ref_flag){first_room = newroom ; ref_flag = 0 ; }
 
 	}
 
 fclose(fp_room) ;
+print_animated("\nInitial Room details have been read successfully into a List ! ") ;
 
 return first_room ;
-	
+
 }
 
 
@@ -127,29 +145,37 @@ return first_room ;
 
 
 
+///returns pointer to first student in the queue
 STUDENT_QUEUE * add_student_to_queue(STUDENT_QUEUE *first , student s)
 {
 
-	node *newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE)) ;
+	STUDENT_QUEUE *newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE)) ;
 	if(!newnode)
 	{
-		printf("\nMaximum memory reached . Malloc failed to allocate for a new queue node ! \n") ; 
+		printf("\nMaximum memory reached . Malloc failed to allocate memory for a new queue node ! \n") ;
 	}
 	newnode->next = NULL ;
 	newnode->stu = s ;
 
-	node *temp = first ;
+	STUDENT_QUEUE *temp = first ;
 	if(first == NULL)
 	{
 		first = newnode ;
-		return newnode ;
 	}
 
-	while(temp->next)
-		temp = temp->next ;
+	else
+	{
+		while(temp->next)
+			temp = temp->next ;
 
-	temp->next = newnode ;
-	return first ; 
+		temp->next = newnode ;
+	}
+
+	print_animated("\nStudent with below details is added to the allotment queue. ") ;
+	char msg[250]  ;
+	sprintf(msg , "\nName : %s\nUSN : %s\n\n" , newnode->stu.name , newnode->stu.usn) ;
+	print_animated(msg) ;
+	return first ;
 }
 
 
@@ -157,20 +183,24 @@ STUDENT_QUEUE * add_student_to_queue(STUDENT_QUEUE *first , student s)
 
 STUDENT_QUEUE * remove_student_from_queue(STUDENT_QUEUE *first) ///DELETE FIRST STUDENT from queue
 {
-	
+
 	if(!first)
 	{
 		printf("\nThe queue is Empty !\n") ;
 		return NULL ;
 	}
 
-	STUDENT_QUEUE * temp = first ; 
+	STUDENT_QUEUE * temp = first ;
 	first = first->next ;
+
+	print_animated("\n\nStudent with below details is removed from the allotment queue : \n") ;
+	char msg[250] ;
+	sprintf(msg ,"\nName : %s \nUSN : %s \n\n" , temp->stu.name , temp->stu.usn) ;
+	print_animated(msg) ;
 
 	free(temp) ;
 	return first ;
 }
-
 
 
 
@@ -180,17 +210,39 @@ bool check_if_room_exists(ROOM *first_room , int room_no)
 	{
 		if(first_room->room_no ==room_no)
 			return 1 ;
+		first_room = first_room->next ;
 	}
+	return 0 ;
 }
 
 
+void Display_students_in_queue(STUDENT_QUEUE * first)
+{
+    if(first==NULL)
+    {
+		print_animated("\nThere are currently no students in the allotment queue ! \n") ;
+		return ;
+    }
+	int i = 1 ;
+    print_animated("\nDetails of Students currently in the Allotment Queue : ") ;
+    print_animated("\n-----------------------------------------------------\n\n") ;
+    char msg[250] ;
 
+    for(STUDENT_QUEUE *temp= first ; temp!=NULL ; temp=temp->next)
+    {
+		sprintf(msg ,"\nSl_No: %d \nName : %s\nUSN : %s\n" , i , temp->stu.name , temp->stu.usn) ;
+		print_animated(msg) ;
+    }
+}
 
 
 int main()
 {
 
 	ROOM *first_room = 0 ;
-	STUDENT_QUEUE *first_student_queue = 0  ; 
+	STUDENT_QUEUE *first_student_queue = 0  ;
+
+	printf("\t\t\tHostel Room Allotment") ;
+	printf("\t\t\t---------------------\n") ;
 
 }

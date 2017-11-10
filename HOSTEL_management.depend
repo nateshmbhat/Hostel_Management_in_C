@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1510270018 source:/home/Natesh/Desktop/DATA_STRUCTURES_project/main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	<ctype.h>
+	<stdbool.h>
+	<unistd.h>
+
