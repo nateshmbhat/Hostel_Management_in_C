@@ -297,7 +297,10 @@ student * read_all_students_from_file(student *first_student)
 	}
 
 	char line[100]  ;int num ;
+	student *temp ;
+
 	setlinebuf(fp) ;
+
 
 	while(!feof(fp))
 	{
@@ -326,15 +329,24 @@ student * read_all_students_from_file(student *first_student)
 
 			fscanf(fp , "%d" , &num) ;
 			newnode->prefered_floor = num ;
+
+			newnode->next  = 0 ;
+
+			if(first_student==NULL)
+			{
+				first_student= newnode ;
+			}
+			else
+			{
+				for(temp = first_student ; temp->next ; temp= temp->next) ;
+				temp->next = newnode ;
+			}
 		}
-
-        printf("%s" , line) ;
-
 	}
 
 
 	fclose(fp);
-	getchar() ;
+	return first_student ;
 }
 
 
@@ -351,14 +363,17 @@ void Display_student_details(student *first , int howmany)
 	printf("-------------------\n") ;
 	student *temp = first ;
 	int i =0 ;
-	char msg[250] ;
-	for( ; temp && (i<howmany ||i==0); i++ , temp = temp->next)
+	char msg[250]  ;
+	for( ; temp && (i<howmany ||howmany==0); temp = temp->next)
 	{
-		sprintf(msg  ,"\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
+
+		sprintf(msg  ,"\n--------------------------\n\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s\n\n--------------------------" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
 		print_animated(msg);
+
 	}
 
-	print_animated("\n\t\t\t*****");
+	print_animated("\n#########");
+	print_animated("\nPress Enter to Continue  : ") ;
 }
 
 
@@ -373,6 +388,8 @@ int main()
 	first_room = read_all_rooms_from_file() ;
 
 	first_student = read_all_students_from_file(first_student) ;
+
+	getchar() ; getchar() ;
 
 
 
