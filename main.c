@@ -350,6 +350,8 @@ student * read_all_students_from_file(student *first_student)
 }
 
 
+
+
 ///Displays the student details and takes any student node as param and if howmany is 0 , all details untill null node is printed . Otherwise only specified number of students are printed .
 void Display_student_details(student *first , int howmany)
 {
@@ -377,6 +379,9 @@ void Display_student_details(student *first , int howmany)
 }
 
 
+
+
+
 int main()
 {
 
@@ -393,39 +398,39 @@ int main()
 
 
 
-while(1)
-{
-	system("clear") ;
-	print_animated("\t\t\tHostel Room Allotment\n") ;
-	print_animated("\t\t\t---------------------\n") ;
-
-	print_animated("\n. Register a New Student.") ;
-	print_animated("\n. Add Student to Allotment Queue.") ;
-	print_animated("\n. Remove Student from the Queue.") ;
-	print_animated("\n. Show default Room Details.") ;
-	print_animated("\n. Show Alloted Room Details.") ;
-	print_animated("\n. Add New Room to the available Pool.") ;
-	printf("\n\nEnter choice : ") ;
-
-	scanf("%d" , &ch) ;getchar() ;
-
-	switch(ch)
+	while(1)
 	{
+		system("clear") ;
+		print_animated("\t\t\tHostel Room Allotment\n") ;
+		print_animated("\t\t\t---------------------\n") ;
 
-		case 1:
-			first_student = register_student(first_student) ;
-			break ;
-		case 2:
-			Display_student_details(first_student , 0) ;
-			break ;
+		print_animated("\n. Register a New Student.") ;
+		print_animated("\n. Add Student to Allotment Queue.") ;
+		print_animated("\n. Remove Student from the Queue.") ;
+		print_animated("\n. Show default Room Details.") ;
+		print_animated("\n. Show Alloted Room Details.") ;
+		print_animated("\n. Add New Room to the available Pool.") ;
+		printf("\n\nEnter choice : ") ;
+
+		scanf("%d" , &ch) ;getchar() ;
+
+		switch(ch)
+		{
+
+			case 1:
+				first_student = register_student(first_student) ;
+				break ;
+			case 2:
+				Display_student_details(first_student , 0) ;
+				break ;
+
+
+		}
+
+		printf("\n\n\n\nPress Enter to continue : \n") ;
+		getchar() ;
 
 
 	}
-
-	printf("\n\n\n\nPress Enter to continue : \n") ;
-	getchar() ;
-
-
-}
 
 }
