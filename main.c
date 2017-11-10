@@ -48,14 +48,15 @@ typedef struct student_queue
 ///Prints the string given with a smooth transition
 void print_animated(char * str)
 {
-	printf("\n") ;
 	int i =0 ;
 	for(i=0 ; str[i] ; i++)
 	{
 		printf("%c" , str[i]) ;
-		usleep(70000)  ;
+		usleep(700)  ;
 		fflush(stdout) ;
 	}
+	fflush(stdout);
+	fflush(stdin) ;
 }
 
 
@@ -236,13 +237,97 @@ void Display_students_in_queue(STUDENT_QUEUE * first)
 }
 
 
+///THIs takes the first node addr of student struct and returns the first node after inserting the details as last node .
+student * register_student(student *first_stu)
+{
+    system("clear") ;
+
+    student *newnode = (student * ) malloc(sizeof(student)) ;
+	newnode->next=0 ;
+
+    print_animated("\nEnter the details for the below given fields : \n") ;
+
+    print_animated("\nName : ") ; fgets(newnode->name , 100 , stdin) ;
+    print_animated("USN : ") ; scanf("%s" ,newnode->usn) ;
+    print_animated("\t\t\tAddress : ") ;
+    print_animated("\n\nCity : ") ; gets(newnode->addr.city);
+    print_animated("Street : ") ; gets(newnode->addr.street);
+    print_animated("House_Name : ") ; gets(newnode->addr.housename);
+
+    print_animated("\n\nPreferred Room number : ") ; scanf("%d" ,newnode->prefered_room) ;
+    print_animated("\nPreferred Floor : ") ; scanf("%d" , newnode->prefered_floor) ;
+
+    if(first_stu==NULL)
+    {
+		first_stu = newnode ;
+    }
+
+    else
+    {
+		student *temp ;
+		for( temp = first_stu ; temp->next ; temp = temp->next) ;
+		temp->next = newnode ;
+    }
+    return first_stu;
+}
+
+
+
+
+void Display_student_details(student *first , int howmany)
+{
+	if(!first)
+	{
+		printf("\nNo students have been registered yet . Please Register students to view the details ! ") ;	
+		return ; 	
+	}
+
+	printf("\nStudent Details :- \n") ; 
+
+	printf("-------------------\n") ; 
+	student *temp = first ;
+	int i =0 ;
+	for( ; i<howmany && temp ; i++ , temp = temp->next)
+	{
+
+		print_animated("\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
+	}
+	print_animated("\n\t\t\t******") ;
+}
+
+
 int main()
 {
-
+	setbuf(stdin , NULL);
 	ROOM *first_room = 0 ;
 	STUDENT_QUEUE *first_student_queue = 0  ;
+	student * first_student = 0  ;
 
-	printf("\t\t\tHostel Room Allotment") ;
-	printf("\t\t\t---------------------\n") ;
+	first_room = read_all_rooms_from_file() ;
+
+	system("toilet HOSTEL ALLOTMENT") ;
+	print_animated("\t\t\tHostel Room Allotment") ;
+	print_animated("\t\t\t---------------------\n") ;
+
+	print_animated("\n. Register a New Student.") ;
+	print_animated("\n. Add Student to Allotment Queue.") ;
+	print_animated("\n. Remove Student from the Queue.") ;
+	print_animated("\n. Show default Room Details.") ;
+	print_animated("\n. Show Alloted Room Details.") ;
+	print_animated("\n. Add New Room to the available Pool.") ;
+
+
+	int ch ;
+	scanf("%d" , &ch) ;
+	fflush(stdin) ;
+	switch(ch)
+	{
+
+		case 1:
+			first_student_queue = register_student(first_student) ;
+			break ;
+
+
+	}
 
 }
