@@ -93,7 +93,6 @@ void Add_room(ROOM *room)
 		fclose(fp_room) ;
 
 		print_animated("\nRoom details written successfully to the file ! \n") ;
-
 	}
 
 	else
@@ -236,6 +235,13 @@ void Display_students_in_queue(STUDENT_QUEUE * first)
     }
 }
 
+int check_alnum(char *s)
+{
+	for(int i =0 ; s[i] ; i++)
+		if(!isalnum(s[i])) return 0 ;
+	return 1 ;
+}
+
 
 ///THIs takes the first node addr of student struct and returns the first node after inserting the details as last node .
 student * register_student(student *first_stu)
@@ -271,9 +277,65 @@ student * register_student(student *first_stu)
 		for( temp = first_stu ; temp->next ; temp = temp->next) ;
 		temp->next = newnode ;
     }
+
+    FILE *fp = fopen("all_students.txt" , "a+") ;
+    setlinebuf(fp) ;
+    fprintf(fp , "\n---\n%s\n%s\n%s\n%s\n%s\n%d\n%d\n\n" , newnode->name , newnode->usn , newnode->addr.city , newnode->addr.street , newnode->addr.housename , newnode->prefered_room , newnode->prefered_floor) ;
+    fclose(fp) ;
     return first_stu;
 }
 
+
+
+///READS THE STUDENT DETAILS FROM all_students.txt file and inserts them all into a data structure.
+student * read_all_students_from_file(student *first_student)
+{
+	FILE *fp = fopen("all_students.txt" , "r") ;
+	if(fp==NULL)
+	{
+		printf("Error opening file !") ;
+	}
+
+	char line[100]  ;int num ;
+	setlinebuf(fp) ;
+
+	while(!feof(fp))
+	{
+		fgets(line, 100 , fp) ;
+		///"---" signifies the start of each student details in the file
+		if(!strcmp(line , "---\n"))
+		{
+			student *newnode = (student *) malloc(sizeof(student)) ;
+			fgets(line , 100 , fp) ;  strtok(line , "\n") ;
+			strcpy(newnode->name , line) ;
+
+			fgets(line , 100 , fp) ;  strtok(line , "\n") ;
+			strcpy(newnode->usn , line) ;
+
+			fgets(line , 100 , fp) ;  strtok(line , "\n") ;
+			strcpy(newnode->addr.city , line) ;
+
+			fgets(line , 100 , fp) ;  strtok(line , "\n") ;
+			strcpy(newnode->addr.street , line) ;
+
+			fgets(line , 100 , fp) ;  strtok(line , "\n") ;
+			strcpy(newnode->addr.housename , line) ;
+
+			fscanf(fp , "%d" , &num) ;
+			newnode->prefered_room = num ;
+
+			fscanf(fp , "%d" , &num) ;
+			newnode->prefered_floor = num ;
+		}
+
+        printf("%s" , line) ;
+
+	}
+
+
+	fclose(fp);
+	getchar() ;
+}
 
 
 ///Displays the student details and takes any student node as param and if howmany is 0 , all details untill null node is printed . Otherwise only specified number of students are printed .
@@ -286,17 +348,17 @@ void Display_student_details(student *first , int howmany)
 	}
 
 	printf("\nStudent Details :- \n") ;
-
 	printf("-------------------\n") ;
 	student *temp = first ;
 	int i =0 ;
-	char msg[250]  ;
+	char msg[250] ;
 	for( ; temp && (i<howmany ||i==0); i++ , temp = temp->next)
 	{
 		sprintf(msg  ,"\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
 		print_animated(msg);
 	}
-	print_animated("\n\t\t\t******");
+
+	print_animated("\n\t\t\t*****");
 }
 
 
@@ -310,6 +372,9 @@ int main()
 
 	first_room = read_all_rooms_from_file() ;
 
+	first_student = read_all_students_from_file(first_student) ;
+
+
 
 while(1)
 {
@@ -319,7 +384,8 @@ while(1)
 
 	print_animated("\n. Register a New Student.") ;
 	print_animated("\n. Add Student to Allotment Queue.") ;
-	print_animated("\n. Remove Student from the Queue.") ; print_animated("\n. Show default Room Details.") ;
+	print_animated("\n. Remove Student from the Queue.") ;
+	print_animated("\n. Show default Room Details.") ;
 	print_animated("\n. Show Alloted Room Details.") ;
 	print_animated("\n. Add New Room to the available Pool.") ;
 	printf("\n\nEnter choice : ") ;
