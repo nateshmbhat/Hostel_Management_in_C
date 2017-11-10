@@ -273,24 +273,25 @@ student * register_student(student *first_stu)
 
 
 
-
+///Displays the student details and takes any student node as param and if howmany is 0 , all details untill null node is printed . Otherwise only specified number of students are printed .
 void Display_student_details(student *first , int howmany)
 {
 	if(!first)
 	{
-		printf("\nNo students have been registered yet . Please Register students to view the details ! ") ;	
-		return ; 	
+		printf("\nNo students have been registered yet . Please Register students to view the details ! ") ;
+		return ;
 	}
 
-	printf("\nStudent Details :- \n") ; 
+	printf("\nStudent Details :- \n") ;
 
-	printf("-------------------\n") ; 
+	printf("-------------------\n") ;
 	student *temp = first ;
 	int i =0 ;
+	char msg[250]  ;
 	for( ; i<howmany && temp ; i++ , temp = temp->next)
 	{
-
-		print_animated("\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
+		sprintf(msg  ,"\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
+		print_animated(msg) ;
 	}
 	print_animated("\n\t\t\t******") ;
 }
@@ -304,15 +305,12 @@ int main()
 	student * first_student = 0  ;
 
 	first_room = read_all_rooms_from_file() ;
-
-	system("toilet HOSTEL ALLOTMENT") ;
 	print_animated("\t\t\tHostel Room Allotment") ;
 	print_animated("\t\t\t---------------------\n") ;
 
 	print_animated("\n. Register a New Student.") ;
 	print_animated("\n. Add Student to Allotment Queue.") ;
-	print_animated("\n. Remove Student from the Queue.") ;
-	print_animated("\n. Show default Room Details.") ;
+	print_animated("\n. Remove Student from the Queue.") ; print_animated("\n. Show default Room Details.") ;
 	print_animated("\n. Show Alloted Room Details.") ;
 	print_animated("\n. Add New Room to the available Pool.") ;
 
@@ -325,6 +323,9 @@ int main()
 
 		case 1:
 			first_student_queue = register_student(first_student) ;
+			break ;
+		case 2:
+			Display_student_details(first_student , 0) ;
 			break ;
 
 
