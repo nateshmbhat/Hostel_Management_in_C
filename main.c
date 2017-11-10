@@ -247,15 +247,18 @@ student * register_student(student *first_stu)
 
     print_animated("\nEnter the details for the below given fields : \n") ;
 
-    print_animated("\nName : ") ; fgets(newnode->name , 100 , stdin) ;
-    print_animated("USN : ") ; scanf("%s" ,newnode->usn) ;
+	char msg[100]  ;
+    print_animated("\nName : ") ; gets(newnode->name) ;
+    print_animated("USN : ") ; gets(newnode->usn) ;
     print_animated("\t\t\tAddress : ") ;
-    print_animated("\n\nCity : ") ; gets(newnode->addr.city);
+    print_animated("\nCity : ") ; gets(newnode->addr.city);
     print_animated("Street : ") ; gets(newnode->addr.street);
     print_animated("House_Name : ") ; gets(newnode->addr.housename);
 
-    print_animated("\n\nPreferred Room number : ") ; scanf("%d" ,newnode->prefered_room) ;
-    print_animated("\nPreferred Floor : ") ; scanf("%d" , newnode->prefered_floor) ;
+    print_animated("\nPreferred Room number : ") ; scanf("%d" ,&newnode->prefered_room) ;
+    print_animated("Preferred Floor : ") ; scanf("%d" , &newnode->prefered_floor) ;
+
+    while(getchar()!='\n') ;
 
     if(first_stu==NULL)
     {
@@ -288,24 +291,30 @@ void Display_student_details(student *first , int howmany)
 	student *temp = first ;
 	int i =0 ;
 	char msg[250]  ;
-	for( ; i<howmany && temp ; i++ , temp = temp->next)
+	for( ; temp && (i<howmany ||i==0); i++ , temp = temp->next)
 	{
 		sprintf(msg  ,"\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s" , temp->name , temp->usn , temp->addr.city  , temp->addr.street , temp->addr.housename ) ;
-		print_animated(msg) ;
+		print_animated(msg);
 	}
-	print_animated("\n\t\t\t******") ;
+	print_animated("\n\t\t\t******");
 }
 
 
 int main()
 {
-	setbuf(stdin , NULL);
+
 	ROOM *first_room = 0 ;
 	STUDENT_QUEUE *first_student_queue = 0  ;
 	student * first_student = 0  ;
+	int ch ;
 
 	first_room = read_all_rooms_from_file() ;
-	print_animated("\t\t\tHostel Room Allotment") ;
+
+
+while(1)
+{
+	system("clear") ;
+	print_animated("\t\t\tHostel Room Allotment\n") ;
 	print_animated("\t\t\t---------------------\n") ;
 
 	print_animated("\n. Register a New Student.") ;
@@ -313,16 +322,15 @@ int main()
 	print_animated("\n. Remove Student from the Queue.") ; print_animated("\n. Show default Room Details.") ;
 	print_animated("\n. Show Alloted Room Details.") ;
 	print_animated("\n. Add New Room to the available Pool.") ;
+	printf("\n\nEnter choice : ") ;
 
+	scanf("%d" , &ch) ;getchar() ;
 
-	int ch ;
-	scanf("%d" , &ch) ;
-	fflush(stdin) ;
 	switch(ch)
 	{
 
 		case 1:
-			first_student_queue = register_student(first_student) ;
+			first_student = register_student(first_student) ;
 			break ;
 		case 2:
 			Display_student_details(first_student , 0) ;
@@ -330,5 +338,11 @@ int main()
 
 
 	}
+
+	printf("\n\n\n\nPress Enter to continue : \n") ;
+	getchar() ;
+
+
+}
 
 }
