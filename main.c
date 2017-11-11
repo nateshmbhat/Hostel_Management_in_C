@@ -441,16 +441,77 @@ void Display_alloted_room_details(ROOM *first_room)
 STUDENT_QUEUE * add_paid_students_to_student_queue(student * first)
 {
 
-	if(first)
+	STUDENT_QUEUE * first_queue = 0 ;
+
+	if(!first)
 	{
-		printf("\There are no students in the LIST OF STUDENTS. Please Register New Students : ");
+		printf("\nThere are no students in the LIST OF STUDENTS. Please Register New Students : ");
+		return first ;
+	}
+
+	FILE *fp_paid = fopen("bill_paid_students.txt" , "r") ;
+
+	if(fp_paid==NULL)
+	{
+		printf("\n Error Opening file !!!") ;
 	}
 
 
+//	flag_first_push_to_queue = true ;
+	while(!feof(fp_paid))
+	{
+		bool skip_flag = false ;
+		char line[100] ;
+		student *stu_temp  ;
+		fgets(line, 100 , fp_paid) ;
+		if(feof(fp_paid))break ;
+		strtok(line , "\n") ;
+		for(int i =0 ; line[i] ; i++)
+			if(!isalnum(line[i]))
+				{
+					skip_flag = true;
+				}
 
+		if(skip_flag==false)
+		{
+			char usn[100]  ;
+			for( stu_temp=first ; stu_temp; stu_temp= stu_temp->next)
+			{
+				strcpy(usn , stu_temp->usn);
+
+				if(!strcmp(usn , line))
+				{
+					STUDENT_QUEUE * newnode = (STUDENT_QUEUE * )malloc(sizeof(STUDENT_QUEUE)) ;
+					newnode->stu = (*stu_temp) ;
+					newnode->next = 0 ;
+
+					if(first_queue==0)
+						first_queue = newnode ;
+
+					else
+					{
+						STUDENT_QUEUE *temp ;
+						for( temp = first_queue ; temp->next ; temp= temp->next) ;
+						temp->next = newnode ;
+					}
+
+					break ;
+				}
+			}
+		}
+	}
+
+	return first_queue ;
+//		STUDENT_QUEUE * newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE)) ;
+    }
+
+
+
+void Display(STUDENT_QUEUE *first)
+{
+	for( ; first ;first = first->next)
+		printf("%s %s\n" , first->stu.name , first->stu.usn) ;
 }
-
-
 
 
 
@@ -467,7 +528,7 @@ int main()
 
 	first_student = read_all_students_from_file(first_student) ;
 
-	student
+
 
 
 	getchar() ;
@@ -513,6 +574,7 @@ int main()
 				break ;
 			case 6:
 				first_student_queue = add_paid_students_to_student_queue(first_student) ;
+				Display(first_student_queue) ;
 
 		}
 
