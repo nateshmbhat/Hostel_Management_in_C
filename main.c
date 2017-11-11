@@ -16,7 +16,6 @@ struct address
 typedef struct student_structure
 {
 	char name[100]  ;
-	int hostel_id ;
 	char usn[100] ;
 	struct address addr  ;
 	int prefered_room ;  //THIS TAKES THE FIRST PREFERENCE IN ALLOTING ROOMS
@@ -412,20 +411,22 @@ void Display_alloted_room_details(ROOM *first_room)
 		return ;
     }
 
-    printf("\nThe Details of Alloted rooms are : \n") ;
+//    printf("\nThe Details of Alloted rooms are : \n") ;
 
-    int flag_not_found = 0 ;
+    int flag_not_found = 1 ;
 	for( ; first_room ; first_room=first_room->next)
 	{
-		if(first_room->s1 || first_room->s2)
+		student *s1  = &first_room->s1  ;
+		student *s2  = &first_room->s2  ;
+
+		if((s2->name[0] && s2->name[1]) || (s1->name[0] && s1->name[1]))
 		{
 			flag_not_found = 1 ;
 			printf("\nRoom Number : %d" , first_room->room_no) ;
 			printf("\nRoom Floor  : %d" , first_room->room_floor) ;
 			printf("\n\t\t\t| Occupant 1 Details :  |\n") ;
-
+			Display_student_details(s1 ,0);
 		}
-
 	}
 
 
@@ -434,6 +435,21 @@ void Display_alloted_room_details(ROOM *first_room)
 		printf("\n\nNo Room has been alloted yet !") ;
 	}
 }
+
+
+
+STUDENT_QUEUE * add_paid_students_to_student_queue(student * first)
+{
+
+	if(first)
+	{
+		printf("\There are no students in the LIST OF STUDENTS. Please Register New Students : ");
+	}
+
+
+
+}
+
 
 
 
@@ -446,9 +462,13 @@ int main()
 	student * first_student = 0  ;
 	int ch ;
 
+
 	first_room = read_all_rooms_from_file() ;
 
 	first_student = read_all_students_from_file(first_student) ;
+
+	student
+
 
 	getchar() ;
 
@@ -459,11 +479,14 @@ int main()
 		print_animated("\t\t\t---------------------\n") ;
 
 		print_animated("\n. Register a New Student.") ;
+		print_animated("\n. Display All Student Details. ") ;
 //		print_animated("\n. Add Student to Allotment Queue.") ;
 //		print_animated("\n. Remove Student from the Queue.") ;
 		print_animated("\n. Add New Room to the available Pool.") ;
 		print_animated("\n. Show the default Room Details.") ;
 		print_animated("\n. Show Alloted Room Details.") ;
+		print_animated("\n. START ALLOTMENT PROCESS.") ;
+
 		printf("\n\nEnter choice : ") ;
 
 		scanf("%d" , &ch) ;getchar() ;
@@ -479,16 +502,22 @@ int main()
 				break ;
 			case 3:
 				Add_room(0) ;
+				break ;
 
 			case 4:
 				Display_inital_room_details(first_room) ;
+				break ;
 
+			case 5 :
+				Display_alloted_room_details(first_room) ;
+				break ;
+			case 6:
+				first_student_queue = add_paid_students_to_student_queue(first_student) ;
 
 		}
 
 		printf("\n\n\n\nPress Enter to continue : \n") ;
 		getchar() ;
-
 
 	}
 
