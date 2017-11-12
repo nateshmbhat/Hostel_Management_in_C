@@ -288,6 +288,12 @@ student *register_student(student *first_stu)
 	return first_stu;
 }
 
+
+
+
+
+
+
 ///READS THE STUDENT DETAILS FROM all_students.txt file and inserts them all into a data structure.
 student *read_all_students_from_file(student *first_student)
 {
@@ -355,6 +361,11 @@ student *read_all_students_from_file(student *first_student)
 	return first_student;
 }
 
+
+
+
+
+
 ///Displays the student details and takes any student node as param and if howmany is 0 , all details untill null node is printed . Otherwise only specified number of students are printed .
 void Display_student_details(student *first, int howmany)
 {
@@ -413,6 +424,9 @@ void Display_alloted_room_details(ROOM *first_room)
 	}
 }
 
+
+
+
 STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 {
 
@@ -430,7 +444,7 @@ STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 	{
 		printf("\n Error Opening file !!!");
 	}
-
+	
 	//	flag_first_push_to_queue = true ;
 	while (!feof(fp_paid))
 	{
@@ -484,12 +498,14 @@ STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 }
 
 
+
+
 ROOM * allot_rooms_to_students(STUDENT_QUEUE * que_first , ROOM * room_first)
 {
 	STUDENT_QUEUE * temp_que = que_first ;
 	ROOM * temp_room = room_first ;
 	int pref_room , pref_floor ;
-
+	
 	if(!temp_que || !room_first)
 	{
 		printf("\nThere are no students right now in the queue OR There are rooms in the ROOM list ! ") ;
@@ -585,7 +601,7 @@ int main()
 			break;
 		case 6:
 			first_student_queue = add_paid_students_to_student_queue(first_student);
-
+			first_room =  allot_rooms_to_students(first_student_queue, first_room) ;
 		}
 
 		printf("\n\n\n\nPress Enter to continue : \n");
