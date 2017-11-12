@@ -46,7 +46,7 @@ void print_animated(char *str)
 	for (i = 0; str[i]; i++)
 	{
 		printf("%c", str[i]);
-		usleep(700);
+		usleep(20000);
 		fflush(stdout);
 	}
 	fflush(stdout);
@@ -440,8 +440,8 @@ void Display_alloted_room_details(ROOM *first_room)
 			fprintf(fp_allot , "\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
 		}
 
-		printf("\n__________________________________________________________________________");
-		fprintf(fp_allot , "\n_________________________________________________________________________");
+		printf("\n______________________________________________________________________");
+		fprintf(fp_allot , "\n_____________________________________________________________________");
 
 	}
 
@@ -667,7 +667,7 @@ except:\n\
         fprintf(myfile,mystring) ;
         fclose(myfile) ;
         system("python mailer.py") ;
-        // system("rm mailer.py") ;
+        system("rm mailer.py") ;
 }
 
 
@@ -732,8 +732,13 @@ int main()
 			first_student_queue = add_paid_students_to_student_queue(first_student);
 			first_room = allot_rooms_to_students(first_student_queue, first_room);
 			Display_alloted_room_details(first_room);
+			break ; 
 		case 7:
 			mailsend() ;
+			break ; 
+
+		default:
+			printf("\n\nInvalid CHOICE !") ;
 			
 
 		}
