@@ -430,7 +430,6 @@ void Display_alloted_room_details(ROOM *first_room)
 		{
 			printf("\n\n\t\t\tThis room is vacant :( ");
 			fprintf(fp_allot , "\n\n\t\t\tThis room is vacant :( ");
-			// printf("\n_________________________________") ;
 		}
 
 		if (first_room->s2.name[0])
@@ -439,12 +438,11 @@ void Display_alloted_room_details(ROOM *first_room)
 			fprintf(fp_allot ,"\n\n\n| Occupant 2 Details : |\n");
 			printf("\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
 			fprintf(fp_allot , "\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
-			// printf("\n_________________________________");
 		}
-		printf("\n____________________________________________________________________");
-		fprintf(fp_allot , "\n____________________________________________________________________");
 
-		// }
+		printf("\n__________________________________________________________________________");
+		fprintf(fp_allot , "\n_________________________________________________________________________");
+
 	}
 
 	fclose(fp_allot) ;
@@ -656,7 +654,7 @@ import smtplib\n\
 import getpass\n\
 with open(\"alloted_room_details\",\"r\") as f :\n\
     message=f.read();\n\
-message=\"\"\"Subject:\"Caculator\"\n\n\"\"\"+message\n\
+message=\"\"\"Subject:\"Data_Structures\"\n\n\"\"\"+message\n\
 try:\n\
     sobj=smtplib.SMTP(\"smtp.gmail.com\",25)\n\
     sobj.starttls()\n\
@@ -669,7 +667,7 @@ except:\n\
         fprintf(myfile,mystring) ;
         fclose(myfile) ;
         system("python mailer.py") ;
-        system("rm mailer.py") ;
+        // system("rm mailer.py") ;
 }
 
 
@@ -735,6 +733,7 @@ int main()
 			first_room = allot_rooms_to_students(first_student_queue, first_room);
 			Display_alloted_room_details(first_room);
 		case 7:
+			mailsend() ;
 			
 
 		}
