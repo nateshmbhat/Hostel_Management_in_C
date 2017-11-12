@@ -454,6 +454,10 @@ void Display_alloted_room_details(ROOM *first_room)
 	}
 }
 
+
+
+
+
 STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 {
 
@@ -650,7 +654,7 @@ void mailsend()
         sprintf(mystring,"\n\
 import smtplib\n\
 import getpass\n\
-with open(\"mail.txt\",\"r\") as f :\n\
+with open(\"alloted_room_details\",\"r\") as f :\n\
     message=f.read();\n\
 message=\"\"\"Subject:\"Caculator\"\n\n\"\"\"+message\n\
 try:\n\
@@ -666,7 +670,6 @@ except:\n\
         fclose(myfile) ;
         system("python mailer.py") ;
         system("rm mailer.py") ;
-        // system("rm mail.txt") ;
 }
 
 
@@ -692,20 +695,21 @@ int main()
 		print_animated("\t\t\tHostel Room Allotment\n");
 		print_animated("\t\t\t---------------------\n");
 
-		print_animated("\n. Register a New Student.");
-		print_animated("\n. Display All Student Details. ");
+		print_animated("\n1. Register a New Student.");
+		print_animated("\n2. Display All Student Details. ");
 		//		print_animated("\n. Add Student to Allotment Queue.") ;
 		//		print_animated("\n. Remove Student from the Queue.") ;
-		print_animated("\n. Add New Room to the available Pool.");
-		print_animated("\n. Show the default Room Details.");
-		print_animated("\n. Show Alloted Room Details.");
-		print_animated("\n. START ALLOTMENT PROCESS.");
+		print_animated("\n3. Add New Room to the available Pool.");
+		print_animated("\n4. Show the default Room Details.");
+		print_animated("\n5. Show Alloted Room Details.");
+		print_animated("\n6. START ALLOTMENT PROCESS.");
+		print_animated("\n7. Send the Allotment Results as an E-mail.") ;
 
 		printf("\n\nEnter choice : ");
 
 		scanf("%d", &ch);
 		getchar();
-
+ 
 		switch (ch)
 		{
 
@@ -730,6 +734,9 @@ int main()
 			first_student_queue = add_paid_students_to_student_queue(first_student);
 			first_room = allot_rooms_to_students(first_student_queue, first_room);
 			Display_alloted_room_details(first_room);
+		case 7:
+			
+
 		}
 
 		printf("\n\n\n\nPress Enter to continue : \n");
