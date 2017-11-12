@@ -21,6 +21,7 @@ typedef struct student_structure
 	int prefered_room;  //THIS TAKES THE FIRST PREFERENCE IN ALLOTING ROOMS
 	int prefered_floor; // THIS TAKES THE SECOND PREFERENCE IN ALLOTING ROOMS
 	struct student_structure *next;
+	bool flag_alloted ;
 } student;
 
 typedef struct rooms
@@ -106,20 +107,25 @@ ROOM *read_all_rooms_from_file() ///or insert rooms at the end of list
 	}
 
 	int ref_flag = 1;
-	ROOM *first_room;
+	ROOM *first_room=0 ;
 	while (!feof(fp_room))
 	{
 		ROOM *newroom = (ROOM *)malloc(sizeof(ROOM));
 
 		newroom->flag_taken = false;
-
+		newroom->next = 0 ;
 		fscanf(fp_room, "%d %d\n", &newroom->room_no, &newroom->room_floor);
 
-		if (ref_flag)
+		if (!first_room)
 		{
 			first_room = newroom;
-			ref_flag = 0;
 		}
+		else
+			{
+				ROOM *temp = first_room ; 
+				for( ; temp->next ; temp = temp->next) ;
+				temp->next = newroom ;
+			}
 	}
 
 	fclose(fp_room);
@@ -444,7 +450,7 @@ STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 	{
 		printf("\n Error Opening file !!!");
 	}
-	
+
 	//	flag_first_push_to_queue = true ;
 	while (!feof(fp_paid))
 	{
@@ -505,21 +511,55 @@ ROOM * allot_rooms_to_students(STUDENT_QUEUE * que_first , ROOM * room_first)
 	STUDENT_QUEUE * temp_que = que_first ;
 	ROOM * temp_room = room_first ;
 	int pref_room , pref_floor ;
-	
-	if(!temp_que || !room_first)
+
+	if(!temp_que || !temp_room)
 	{
 		printf("\nThere are no students right now in the queue OR There are rooms in the ROOM list ! ") ;
 		return room_first ;
 	}
+	
 
-	for( ; temp_que ; temp_que= temp_que->next)
+	///ALLOT BASED ON Prefered ROOM !
+	for( temp_que = que_first ; temp_que ; temp_que = temp_que->next)
 	{
-		pref_room = temp_que->stu.prefered_room ;
-		pref_floor = temp_que->stu.prefered_floor ;
-
-		for( ; temp_room ; temp_room = temp_room->next)
+	for(temp_room = room_first ; temp_room ; temp_room = temp_room->next)
 		{
+			pref_room = temp_que->stu.prefered_room ;
+
 			if(pref_room==temp_room->room_no  && temp_room->flag_taken!=true)
+			{
+				if(temp_room->s1.usn[0] && temp_room->s1.usn[1])
+					{
+					temp_room->s2 = (temp_que->stu) ;
+					temp_room->s2.flag_alloted = true ;
+					temp_room->flag_taken = true ;
+					}
+				else if (temp_room->s2.usn[0] && temp_room->s2.usn[1])
+					{
+					temp_room->s1 = (temp_que->stu) ;
+					temp_room->s2.flag_alloted = true ;
+					temp_room->flag_taken = true ;
+					}
+				else
+				{
+					temp_room->s1=(temp_que->stu) ;
+					
+				}
+
+			}
+		}
+
+	}
+
+
+///ALLOT ROOMS BASED ON PREFERRED FLOOR 
+	for( temp_que = que_first ; temp_que ; temp_que = temp_que->next)
+	{
+	for(temp_room = room_first ; temp_room ; temp_room = temp_room->next)
+		{
+			pref_floor = temp_que->stu.prefered_floor ;
+
+			if(pref_floor=temp_room->room_floor  && temp_room->flag_taken!=true)
 			{
 				if(temp_room->s1.usn[0] && temp_room->s1.usn[1])
 					{
@@ -541,6 +581,8 @@ ROOM * allot_rooms_to_students(STUDENT_QUEUE * que_first , ROOM * room_first)
 
 	}
 
+
+	return room_first ;
 }
 
 
