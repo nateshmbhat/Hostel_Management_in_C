@@ -21,7 +21,7 @@ typedef struct student_structure
 	int prefered_room;  //THIS TAKES THE FIRST PREFERENCE IN ALLOTING ROOMS
 	int prefered_floor; // THIS TAKES THE SECOND PREFERENCE IN ALLOTING ROOMS
 	struct student_structure *next;
-	bool flag_alloted ;
+	bool flag_alloted;
 } student;
 
 typedef struct rooms
@@ -107,13 +107,13 @@ ROOM *read_all_rooms_from_file() ///or insert rooms at the end of list
 	}
 
 	int ref_flag = 1;
-	ROOM *first_room=0 ;
+	ROOM *first_room = 0;
 	while (!feof(fp_room))
 	{
 		ROOM *newroom = (ROOM *)malloc(sizeof(ROOM));
 
 		newroom->flag_taken = false;
-		newroom->next = 0 ;
+		newroom->next = 0;
 		fscanf(fp_room, "%d %d\n", &newroom->room_no, &newroom->room_floor);
 
 		if (!first_room)
@@ -121,11 +121,12 @@ ROOM *read_all_rooms_from_file() ///or insert rooms at the end of list
 			first_room = newroom;
 		}
 		else
-			{
-				ROOM *temp = first_room ; 
-				for( ; temp->next ; temp = temp->next) ;
-				temp->next = newroom ;
-			}
+		{
+			ROOM *temp = first_room;
+			for (; temp->next; temp = temp->next)
+				;
+			temp->next = newroom;
+		}
 	}
 
 	fclose(fp_room);
@@ -294,12 +295,6 @@ student *register_student(student *first_stu)
 	return first_stu;
 }
 
-
-
-
-
-
-
 ///READS THE STUDENT DETAILS FROM all_students.txt file and inserts them all into a data structure.
 student *read_all_students_from_file(student *first_student)
 {
@@ -367,11 +362,6 @@ student *read_all_students_from_file(student *first_student)
 	return first_student;
 }
 
-
-
-
-
-
 ///Displays the student details and takes any student node as param and if howmany is 0 , all details untill null node is printed . Otherwise only specified number of students are printed .
 void Display_student_details(student *first, int howmany)
 {
@@ -414,44 +404,40 @@ void Display_alloted_room_details(ROOM *first_room)
 		student *s1 = &first_room->s1;
 		student *s2 = &first_room->s2;
 
-		if ((s2->name[0] && s2->name[1]) || (s1->name[0] && s1->name[1]))
+		// if ((s2->name[0] && s2->name[1]) || (s1->name[0] && s1->name[1]))
+		// {
+		flag_not_found = 0;
+		printf("\n\n\n______________________________________________________________________");
+		printf("\n\n\t\t\tRoom Number : %d", first_room->room_no);
+		printf("\n\t\t\tRoom Floor  : %d", first_room->room_floor);
+		if (first_room->s1.name[0])
 		{
-			flag_not_found = 0;
-			printf("\n\n___________________________________"); 
-			printf("\nRoom Number : %d", first_room->room_no);
-			printf("\nRoom Floor  : %d", first_room->room_floor);
-			if(first_room->s1.name[0])
-			{
-				printf("\n\t\t\t| Occupant 1 Details :  |\n");
-				printf("\nName : %s\nUSN: %s \nCity : %s" , s1->name , s1->usn , s1->addr.city);
-				printf("\n_________________________________"); 
-			}
-			
-			else
-			{
-				printf("\nThis room is vacant :( ") ;
-				printf("\n_________________________________") ;
-			}
-
-			if(first_room->s2.name[0])
-			{
-				printf("\n\t\t\t| Occupant 2 Details :  |\n");
-				printf("\nName : %s\nUSN: %s \nCity : %s" , s2->name , s2->usn , s2->addr.city);
-				printf("\n_________________________________"); 
-			}
-			
+			printf("\n| Occupant 1 Details : |\n");
+			printf("\nName : %s\nUSN: %s \nCity : %s", s1->name, s1->usn, s1->addr.city);
 		}
-	}
 
+		else
+		{
+			printf("\n\n\t\t\tThis room is vacant :( ");
+			// printf("\n_________________________________") ;
+		}
+
+		if (first_room->s2.name[0])
+		{
+			printf("\n\n\n| Occupant 2 Details : |\n");
+			printf("\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
+			// printf("\n_________________________________");
+		}
+		printf("\n____________________________________________________________________");
+
+		// }
+	}
 
 	if (flag_not_found)
 	{
 		printf("\n\nNo Room has been alloted yet !");
 	}
 }
-
-
-
 
 STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 {
@@ -497,21 +483,21 @@ STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 				if (!strcmp(usn, line))
 				{
 
-					first_queue = add_student_to_queue(first_queue, (*stu_temp)) ;
-//					STUDENT_QUEUE *newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE));
-//					newnode->stu = (*stu_temp);
-//					newnode->next = 0;
-//
-//					if (first_queue == 0)
-//						first_queue = newnode;
-//
-//					else
-//					{
-//						STUDENT_QUEUE *temp;
-//						for (temp = first_queue; temp->next; temp = temp->next)
-//							;
-//						temp->next = newnode;
-//					}
+					first_queue = add_student_to_queue(first_queue, (*stu_temp));
+					//					STUDENT_QUEUE *newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE));
+					//					newnode->stu = (*stu_temp);
+					//					newnode->next = 0;
+					//
+					//					if (first_queue == 0)
+					//						first_queue = newnode;
+					//
+					//					else
+					//					{
+					//						STUDENT_QUEUE *temp;
+					//						for (temp = first_queue; temp->next; temp = temp->next)
+					//							;
+					//						temp->next = newnode;
+					//					}
 
 					break;
 				}
@@ -523,131 +509,120 @@ STUDENT_QUEUE *add_paid_students_to_student_queue(student *first)
 	//		STUDENT_QUEUE * newnode = (STUDENT_QUEUE *)malloc(sizeof(STUDENT_QUEUE)) ;
 }
 
-
-
-
-ROOM * allot_rooms_to_students(STUDENT_QUEUE * que_first , ROOM * room_first)
+ROOM *allot_rooms_to_students(STUDENT_QUEUE *que_first, ROOM *room_first)
 {
-	STUDENT_QUEUE * temp_que = que_first ;
-	ROOM * temp_room = room_first ;
-	int pref_room , pref_floor ;
+	STUDENT_QUEUE *temp_que = que_first;
+	ROOM *temp_room = room_first;
+	int pref_room, pref_floor;
 
-	if(!temp_que || !temp_room)
+	if (!temp_que || !temp_room)
 	{
-		printf("\nThere are no students right now in the queue OR There are rooms in the ROOM list ! ") ;
-		return room_first ;
+		printf("\nThere are no students right now in the queue OR There are rooms in the ROOM list ! ");
+		return room_first;
 	}
-	
 
 	///ALLOT BASED ON Prefered ROOM !
-	for( temp_que = que_first ; temp_que ; temp_que = temp_que->next)
+	for (temp_que = que_first; temp_que; temp_que = temp_que->next)
 	{
-	for(temp_room = room_first ; temp_room ; temp_room = temp_room->next)
+		for (temp_room = room_first; temp_room; temp_room = temp_room->next)
 		{
-			pref_room = temp_que->stu.prefered_room ;
+			pref_room = temp_que->stu.prefered_room;
 
-			if(pref_room==temp_room->room_no  && temp_room->flag_taken!=true)
+			if (pref_room == temp_room->room_no && temp_room->flag_taken != true)
 			{
-				if(temp_room->s1.usn[0] && temp_room->s1.usn[1])
-					{
-					temp_room->s2 = (temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ;
-					temp_room->flag_taken = true ;
-					}
+				if (temp_room->s1.usn[0] && temp_room->s1.usn[1])
+				{
+					temp_room->s2 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
 				else if (temp_room->s2.usn[0] && temp_room->s2.usn[1])
-					{
-					temp_room->s1 = (temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ;
-					temp_room->flag_taken = true ;
-					}
+				{
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
 				else
 				{
-					temp_room->s1=(temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ;
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
 				}
-				break ;
-
-			}
-		} 
-	}
-
-
-///ALLOT ROOMS BASED ON PREFERRED FLOOR 
-	for( temp_que = que_first ; temp_que ; temp_que = temp_que->next)
-	{
-		if(temp_que->stu.flag_alloted) continue ;
-
-	for(temp_room = room_first ; temp_room ; temp_room = temp_room->next)
-		{
-			pref_floor = temp_que->stu.prefered_floor ;
-
-			if(pref_floor=temp_room->room_floor  && temp_room->flag_taken!=true)
-			{
-				if(temp_room->s1.usn[0] && temp_room->s1.usn[1])
-					{
-					temp_room->s2 = (temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ; 
-					temp_room->flag_taken = true ;
-					}
-				else if (temp_room->s2.usn[0] && temp_room->s2.usn[1])
-					{
-					temp_room->s1 = (temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ; 
-					temp_room->flag_taken = true ;
-					}
-				else
-				{
-					temp_room->s1=(temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ;
-				}
-			
-			break ;
-
+				break;
 			}
 		}
-
 	}
 
-
-///ALlotent of the rest of the students who haven't got the desired rooms
-	for( temp_que = que_first ; temp_que ; temp_que = temp_que->next)
+	///ALLOT ROOMS BASED ON PREFERRED FLOOR
+	for (temp_que = que_first; temp_que; temp_que = temp_que->next)
 	{
-		if(temp_que->stu.flag_alloted) continue ;
+		if (temp_que->stu.flag_alloted)
+			continue;
 
-	for(temp_room = room_first ; temp_room ; temp_room = temp_room->next)
+		for (temp_room = room_first; temp_room; temp_room = temp_room->next)
 		{
+			pref_floor = temp_que->stu.prefered_floor;
 
-			if(temp_room->flag_taken!=true)
+			if (pref_floor = temp_room->room_floor && temp_room->flag_taken != true)
 			{
-				if(temp_room->s1.usn[0] && temp_room->s1.usn[1])
-					{
-						temp_room->s2 = (temp_que->stu) ;
-						temp_que->stu.flag_alloted = true ; 
-						temp_room->flag_taken = true ;
-					}
+				if (temp_room->s1.usn[0] && temp_room->s1.usn[1])
+				{
+					temp_room->s2 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
 				else if (temp_room->s2.usn[0] && temp_room->s2.usn[1])
-					{
-					temp_room->s1 = (temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ; 
-					temp_room->flag_taken = true ;
-					}
+				{
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
 				else
 				{
-					temp_room->s1=(temp_que->stu) ;
-					temp_que->stu.flag_alloted = true ;
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
 				}
 
-			 break ; 
+				break;
 			}
 		}
-
 	}
 
-	return room_first ;
+	///ALlotent of the rest of the students who haven't got the desired rooms
+	for (temp_que = que_first; temp_que; temp_que = temp_que->next)
+	{
+		if (temp_que->stu.flag_alloted)
+			continue;
+
+		for (temp_room = room_first; temp_room; temp_room = temp_room->next)
+		{
+
+			if (temp_room->flag_taken != true)
+			{
+				if (temp_room->s1.usn[0] && temp_room->s1.usn[1])
+				{
+					temp_room->s2 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
+				else if (temp_room->s2.usn[0] && temp_room->s2.usn[1])
+				{
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+					temp_room->flag_taken = true;
+				}
+				else
+				{
+					temp_room->s1 = (temp_que->stu);
+					temp_que->stu.flag_alloted = true;
+				}
+
+				break;
+			}
+		}
+	}
+
+	return room_first;
 }
-
-
-
 
 int main()
 {
@@ -705,8 +680,8 @@ int main()
 			break;
 		case 6:
 			first_student_queue = add_paid_students_to_student_queue(first_student);
-			first_room =  allot_rooms_to_students(first_student_queue, first_room) ;
-			Display_alloted_room_details(first_room) ;
+			first_room = allot_rooms_to_students(first_student_queue, first_room);
+			Display_alloted_room_details(first_room);
 		}
 
 		printf("\n\n\n\nPress Enter to continue : \n");
