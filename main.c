@@ -396,6 +396,10 @@ void Display_alloted_room_details(ROOM *first_room)
 		return;
 	}
 
+	FILE *fp_allot = fopen("alloted_room_details" , "w") ;
+	if(!fp_allot){
+		printf("\nOpening of alloted_room_details failed ! ") ;
+	}
 	//    printf("\nThe Details of Alloted rooms are : \n") ;
 
 	int flag_not_found = 1;
@@ -408,31 +412,42 @@ void Display_alloted_room_details(ROOM *first_room)
 		// {
 		flag_not_found = 0;
 		printf("\n\n\n______________________________________________________________________");
+		fprintf(fp_allot ,"\n\n\n______________________________________________________________________");
 		printf("\n\n\t\t\tRoom Number : %d", first_room->room_no);
+		fprintf(fp_allot , "\n\n\t\t\tRoom Number : %d", first_room->room_no);
 		printf("\n\t\t\tRoom Floor  : %d", first_room->room_floor);
+		fprintf(fp_allot , "\n\t\t\tRoom Floor  : %d", first_room->room_floor);
 		if (first_room->s1.name[0])
 		{
 			printf("\n| Occupant 1 Details : |\n");
+			fprintf(fp_allot  , "\n| Occupant 1 Details : |\n");
+
 			printf("\nName : %s\nUSN: %s \nCity : %s", s1->name, s1->usn, s1->addr.city);
+			fprintf(fp_allot , "\nName : %s\nUSN: %s \nCity : %s", s1->name, s1->usn, s1->addr.city);
 		}
 
 		else
 		{
 			printf("\n\n\t\t\tThis room is vacant :( ");
+			fprintf(fp_allot , "\n\n\t\t\tThis room is vacant :( ");
 			// printf("\n_________________________________") ;
 		}
 
 		if (first_room->s2.name[0])
 		{
 			printf("\n\n\n| Occupant 2 Details : |\n");
+			fprintf(fp_allot ,"\n\n\n| Occupant 2 Details : |\n");
 			printf("\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
+			fprintf(fp_allot , "\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
 			// printf("\n_________________________________");
 		}
 		printf("\n____________________________________________________________________");
+		fprintf(fp_allot , "\n____________________________________________________________________");
 
 		// }
 	}
 
+	fclose(fp_allot) ;
 	if (flag_not_found)
 	{
 		printf("\n\nNo Room has been alloted yet !");
@@ -623,6 +638,39 @@ ROOM *allot_rooms_to_students(STUDENT_QUEUE *que_first, ROOM *room_first)
 
 	return room_first;
 }
+
+
+
+
+void mailsend()
+{
+    char mystring[2500] ;
+        FILE* myfile ;
+        myfile = fopen("mailer.py","w") ;
+        sprintf(mystring,"\n\
+import smtplib\n\
+import getpass\n\
+with open(\"mail.txt\",\"r\") as f :\n\
+    message=f.read();\n\
+message=\"\"\"Subject:\"Caculator\"\n\n\"\"\"+message\n\
+try:\n\
+    sobj=smtplib.SMTP(\"smtp.gmail.com\",25)\n\
+    sobj.starttls()\n\
+    sobj.login(\"nateshmbhat1@gmail.com\",getpass.getpass(\"Enter Natesh's gmail password : \")) \n\
+    sobj.sendmail(\"nateshmbhat1@gmail.com\",raw_input(\"Enter recepient mail address : \"),message)\n\
+    print(\"Mail sent successfully ! \")\n\
+except:\n\
+    print(\"Internet connection Error ! Check network connection !\")\n\
+    ") ;
+        fprintf(myfile,mystring) ;
+        fclose(myfile) ;
+        system("python mailer.py") ;
+        system("rm mailer.py") ;
+        // system("rm mail.txt") ;
+}
+
+
+
 
 int main()
 {
