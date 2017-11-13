@@ -192,7 +192,7 @@ STUDENT_QUEUE *add_student_to_queue(STUDENT_QUEUE *first, student s)
 		temp->next = newnode;
 	}
 
-	print_animated("\nStudent with below details is added to the allotment queue. " , 2);
+	// print_animated("\nStudent with below details is added to the allotment queue. " , 2);
 	char msg[250];
 	sprintf(msg, "\nName : %s\nUSN : %s\n\n", newnode->stu.name, newnode->stu.usn);
 	print_animated(msg , 3);
@@ -685,7 +685,10 @@ except:\n\
 }
 
 
+void display_paid_students(student *first)
+{
 
+}
 
 int main()
 {
@@ -712,13 +715,12 @@ int main()
 
 		print_animated("\n1. Register a New Student." , wait_time);
 		print_animated("\n2. Display All Student Details. " , wait_time);
-		//		print_animated("\n. Add Student to Allotment Queue." , wait_time) ;
-		//		print_animated("\n. Remove Student from the Queue." , wait_time) ;
-		print_animated("\n3. Add New Room to the available Pool." , wait_time);
-		print_animated("\n4. Show the default Room Details." , wait_time);
-		print_animated("\n5. Show Alloted Room Details." , wait_time);
-		print_animated("\n6. START ALLOTMENT PROCESS." , wait_time);
-		print_animated("\n7. Send the Allotment Results as an E-mail." , wait_time) ;
+		print_animated("\n3. Display Students who have paid the bill." , wait_time) ;
+		print_animated("\n4. Add New Room to the available Pool." , wait_time);
+		print_animated("\n5. Show the default Room Details." , wait_time);
+		print_animated("\n6. Show Alloted Room Details." , wait_time);
+		print_animated("\n7. START ALLOTMENT PROCESS." , wait_time);
+		print_animated("\n8. Send the Allotment Results as an E-mail." , wait_time) ;
 
 		printf("\n\nEnter choice : ");
 
@@ -734,23 +736,28 @@ int main()
 		case 2:
 			Display_student_details(first_student, 0);
 			break;
+		
 		case 3:
+			system("clear") ;
+			first_student_queue = add_paid_students_to_student_queue(first_student);
+			break ; 
+		case 4:
 			Add_room(0);
 			break;
 
-		case 4:
+		case 5:
 			Display_inital_room_details(first_room);
 			break;
 
-		case 5:
+		case 6:
 			Display_alloted_room_details(first_room);
 			break;
-		case 6:
+		case 7:
 			first_student_queue = add_paid_students_to_student_queue(first_student);
 			first_room = allot_rooms_to_students(first_student_queue, first_room);
 			Display_alloted_room_details(first_room);
 			break ; 
-		case 7:
+		case 8:
 			mailsend() ;
 			break ; 
 
