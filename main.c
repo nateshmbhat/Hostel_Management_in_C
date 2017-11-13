@@ -39,19 +39,33 @@ typedef struct student_queue
 	struct student_queue *next;
 } STUDENT_QUEUE;
 
+
+
+
 ///Prints the string given with a smooth transition
-void print_animated(char *str)
+void print_animated(char *str  , int ref)
 {
+	int wait_time = 0; 
+	switch(ref)
+	{
+		case 1 : wait_time = 2000  ; break ; 
+		case 2 : wait_time = 4000 ; break ; 
+		case 3: wait_time = 8000  ; break ; 
+		case 4 : wait_time = 20000 ; break ; 
+		case 5 : wait_time = 40000 ; break ;
+	}
 	int i = 0;
 	for (i = 0; str[i]; i++)
 	{
 		printf("%c", str[i]);
-		usleep(20000);
+		usleep(wait_time );
 		fflush(stdout);
 	}
 	fflush(stdout);
 	fflush(stdin);
 }
+
+
 
 ///This function is used to add or insert rooms into the pool of rooms and takes the room_no and its floor as input
 ///Takes any room node as the input and within the function initialises the room_no and floor and flag para
@@ -83,7 +97,7 @@ void Add_room(ROOM *room)
 		fprintf(fp_room, "%d %d\n", newroom->room_no, newroom->room_floor);
 		fclose(fp_room);
 
-		print_animated("\nRoom details written successfully to the file ! \n");
+		print_animated("\nRoom details written successfully to the file ! \n" , 2);
 	}
 
 	else
@@ -93,6 +107,7 @@ void Add_room(ROOM *room)
 			room = room->next;
 		room->next = newroom;
 	}
+	getchar() ;
 }
 
 ///Reads the rooms details from the file and inserts the rooms into a linked list .
@@ -130,7 +145,6 @@ ROOM *read_all_rooms_from_file() ///or insert rooms at the end of list
 	}
 
 	fclose(fp_room);
-	print_animated("\nInitial Room details have been read successfully into a List ! ");
 
 	return first_room;
 }
@@ -178,10 +192,10 @@ STUDENT_QUEUE *add_student_to_queue(STUDENT_QUEUE *first, student s)
 		temp->next = newnode;
 	}
 
-	print_animated("\nStudent with below details is added to the allotment queue. ");
+	print_animated("\nStudent with below details is added to the allotment queue. " , 2);
 	char msg[250];
 	sprintf(msg, "\nName : %s\nUSN : %s\n\n", newnode->stu.name, newnode->stu.usn);
-	print_animated(msg);
+	print_animated(msg , 3);
 	return first;
 }
 
@@ -196,10 +210,10 @@ STUDENT_QUEUE *remove_student_from_queue(STUDENT_QUEUE *first) ///DELETE FIRST S
 	STUDENT_QUEUE *temp = first;
 	first = first->next;
 
-	print_animated("\n\nStudent with below details is removed from the allotment queue : \n");
+	print_animated("\n\nStudent with below details is removed from the allotment queue : \n" , 2);
 	char msg[250];
 	sprintf(msg, "\nName : %s \nUSN : %s \n\n", temp->stu.name, temp->stu.usn);
-	print_animated(msg);
+	print_animated(msg , 3);
 
 	free(temp);
 	return first;
@@ -221,18 +235,18 @@ void Display_students_in_queue(STUDENT_QUEUE *first)
 	system("clear");
 	if (first == NULL)
 	{
-		print_animated("\nThere are currently no students in the allotment queue ! \n");
+		print_animated("\nThere are currently no students in the allotment queue ! \n" , 3);
 		return;
 	}
 	int i = 1;
-	print_animated("\nDetails of Students currently in the Allotment Queue : ");
-	print_animated("\n-----------------------------------------------------\n\n");
+	print_animated("\nDetails of Students currently in the Allotment Queue : " , 3);
+	print_animated("\n-----------------------------------------------------\n\n" , 3);
 	char msg[250];
 
 	for (STUDENT_QUEUE *temp = first; temp != NULL; temp = temp->next)
 	{
 		sprintf(msg, "\nSl_No: %d \nName : %s\nUSN : %s\n", i, temp->stu.name, temp->stu.usn);
-		print_animated(msg);
+		print_animated(msg , 3);
 	}
 }
 
@@ -252,24 +266,24 @@ student *register_student(student *first_stu)
 	student *newnode = (student *)malloc(sizeof(student));
 	newnode->next = 0;
 
-	print_animated("\nEnter the details for the below given fields : \n");
+	print_animated("\nEnter the details for the below given fields : \n" , 2);
 
 	char msg[100];
-	print_animated("\nName : ");
+	print_animated("\nName : " , 2);
 	gets(newnode->name);
-	print_animated("USN : ");
+	print_animated("USN : " , 2);
 	gets(newnode->usn);
-	print_animated("\t\t\tAddress : ");
-	print_animated("\nCity : ");
+	print_animated("\t\t\tAddress : " , 2);
+	print_animated("\nCity : " , 2);
 	gets(newnode->addr.city);
-	print_animated("Street : ");
+	print_animated("Street : " , 2);
 	gets(newnode->addr.street);
-	print_animated("House_Name : ");
+	print_animated("House_Name : " , 2);
 	gets(newnode->addr.housename);
 
-	print_animated("\nPreferred Room number : ");
+	print_animated("\nPreferred Room number : " , 2);
 	scanf("%d", &newnode->prefered_room);
-	print_animated("Preferred Floor : ");
+	print_animated("Preferred Floor : " , 2);
 	scanf("%d", &newnode->prefered_floor);
 
 	while (getchar() != '\n')
@@ -381,10 +395,10 @@ void Display_student_details(student *first, int howmany)
 	{
 
 		sprintf(msg, "\n--------------------------\n\nName : %s\nUSN : %s\n\t\tAddress :-\nCity : %s\nStreet : %s \nHouse name : %s\n\n--------------------------", temp->name, temp->usn, temp->addr.city, temp->addr.street, temp->addr.housename);
-		print_animated(msg);
+		print_animated(msg , 3);
 	}
 
-	print_animated("\n#########");
+	print_animated("\n#########" , 2);
 }
 
 void Display_alloted_room_details(ROOM *first_room)
@@ -411,7 +425,7 @@ void Display_alloted_room_details(ROOM *first_room)
 		// if ((s2->name[0] && s2->name[1]) || (s1->name[0] && s1->name[1]))
 		// {
 		flag_not_found = 0;
-		printf("\n\n\n______________________________________________________________________");
+		print_animated("\n\n\n______________________________________________________________________" , 2);
 		fprintf(fp_allot ,"\n\n\n______________________________________________________________________");
 		printf("\n\n\t\t\tRoom Number : %d", first_room->room_no);
 		fprintf(fp_allot , "\n\n\t\t\tRoom Number : %d", first_room->room_no);
@@ -419,7 +433,7 @@ void Display_alloted_room_details(ROOM *first_room)
 		fprintf(fp_allot , "\n\t\t\tRoom Floor  : %d", first_room->room_floor);
 		if (first_room->s1.name[0])
 		{
-			printf("\n| Occupant 1 Details : |\n");
+			print_animated("\n| Occupant 1 Details : |\n" , 2);
 			fprintf(fp_allot  , "\n| Occupant 1 Details : |\n");
 
 			printf("\nName : %s\nUSN: %s \nCity : %s", s1->name, s1->usn, s1->addr.city);
@@ -428,19 +442,19 @@ void Display_alloted_room_details(ROOM *first_room)
 
 		else
 		{
-			printf("\n\n\t\t\tThis room is vacant :( ");
+			print_animated("\n\n\t\t\tThis room is vacant :( " , 2);
 			fprintf(fp_allot , "\n\n\t\t\tThis room is vacant :( ");
 		}
 
 		if (first_room->s2.name[0])
 		{
-			printf("\n\n\n| Occupant 2 Details : |\n");
+			print_animated("\n\n\n| Occupant 2 Details : |\n" , 2);
 			fprintf(fp_allot ,"\n\n\n| Occupant 2 Details : |\n");
 			printf("\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
 			fprintf(fp_allot , "\nName : %s\nUSN: %s \nCity : %s", s2->name, s2->usn, s2->addr.city);
 		}
 
-		printf("\n______________________________________________________________________");
+		print_animated("\n______________________________________________________________________" , 2);
 		fprintf(fp_allot , "\n_____________________________________________________________________");
 
 	}
@@ -448,7 +462,7 @@ void Display_alloted_room_details(ROOM *first_room)
 	fclose(fp_allot) ;
 	if (flag_not_found)
 	{
-		printf("\n\nNo Room has been alloted yet !");
+		print_animated("\n\nNo Room has been alloted yet !" , 3);
 	}
 }
 
@@ -686,22 +700,25 @@ int main()
 	first_student = read_all_students_from_file(first_student);
 
 	getchar();
-
+	int flag_first_time = 1 , wait_time = 4;
 	while (1)
 	{
+		if(flag_first_time)wait_time = 5 ;
+		else wait_time = 2 ;
+		flag_first_time = 0 ;
 		system("clear");
-		print_animated("\t\t\tHostel Room Allotment\n");
-		print_animated("\t\t\t---------------------\n");
+		print_animated("\t\t\tHostel Room Allotment\n" , wait_time);
+		print_animated("\t\t\t---------------------\n" , wait_time);
 
-		print_animated("\n1. Register a New Student.");
-		print_animated("\n2. Display All Student Details. ");
-		//		print_animated("\n. Add Student to Allotment Queue.") ;
-		//		print_animated("\n. Remove Student from the Queue.") ;
-		print_animated("\n3. Add New Room to the available Pool.");
-		print_animated("\n4. Show the default Room Details.");
-		print_animated("\n5. Show Alloted Room Details.");
-		print_animated("\n6. START ALLOTMENT PROCESS.");
-		print_animated("\n7. Send the Allotment Results as an E-mail.") ;
+		print_animated("\n1. Register a New Student." , wait_time);
+		print_animated("\n2. Display All Student Details. " , wait_time);
+		//		print_animated("\n. Add Student to Allotment Queue." , wait_time) ;
+		//		print_animated("\n. Remove Student from the Queue." , wait_time) ;
+		print_animated("\n3. Add New Room to the available Pool." , wait_time);
+		print_animated("\n4. Show the default Room Details." , wait_time);
+		print_animated("\n5. Show Alloted Room Details." , wait_time);
+		print_animated("\n6. START ALLOTMENT PROCESS." , wait_time);
+		print_animated("\n7. Send the Allotment Results as an E-mail." , wait_time) ;
 
 		printf("\n\nEnter choice : ");
 
